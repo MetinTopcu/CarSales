@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<CarDbContext>();
-builder.Services.AddTransient(typeof(IService<>), typeof(Service<,>));
+builder.Services.AddTransient(typeof(IService<,>), typeof(Service<,>));
 
 var app = builder.Build();
 
@@ -26,6 +26,11 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+            name: "admin",
+            pattern: "{area:exists}/{controller=Main}/{action=Index}/{id?}"
+          );
 
 app.MapControllerRoute(
     name: "default",
