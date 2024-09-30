@@ -5,6 +5,7 @@ namespace CarSales.Entities
 {
     public class Car : IEntity<int>
     {
+        [Key]
         public int Id { get; set; }
         public int BrandId { get; set; }
         [StringLength(50)]
@@ -17,6 +18,6 @@ namespace CarSales.Entities
         public int ModelYear { get; set; }
         public bool IsItOnSale { get; set; }
         public string Notes { get; set; }
-        public virtual Brand? Brand { get; set; }
+        public Brand? Brand { get; set; }
     }
 }

@@ -1,8 +1,11 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace CarSales.Entities
 {
     public class Service : IEntity<int>
     {
+        [Key]
         public int Id { get; set; }
         public DateTime ServiceArrivalDate { get; set; }
         public string CarProblem { get; set; }

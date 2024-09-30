@@ -1,8 +1,11 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace CarSales.Entities
 {
     public class Customer : IEntity<int>
     {
+        [Key]
         public int Id { get; set; }
         public int CarID { get; set; }
         public string Name { get; set; }
@@ -12,6 +15,6 @@ namespace CarSales.Entities
         public string Adress { get; set; }
         public string Phone { get; set; }
         public string Notes { get; set; }
-        public virtual Car? Car { get; set; }
+        public Car? Car { get; set; }
     }
 }
