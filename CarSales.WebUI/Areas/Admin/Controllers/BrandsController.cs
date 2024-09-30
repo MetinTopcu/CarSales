@@ -43,8 +43,8 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
         }
         public async Task<IActionResult> EditAsync(int id)
         {
-            await _service.GetByIdAsync(id);
-            return View();
+            var model = await _service.GetByIdAsync(id);
+            return View(model);
         }
 
         [HttpPost]

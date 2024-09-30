@@ -55,12 +55,12 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
         {
             var model = await _service.GetByIdAsync(id);
             ViewBag.RoleId = new SelectList(await _serviceRole.GetAllAsync(), "Id", "Name");
-            return View();
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(int id, User user)
+        public async Task<IActionResult> EditAsync(User user)
         {
             if (ModelState.IsValid)
             {
