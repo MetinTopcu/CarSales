@@ -1,0 +1,100 @@
+﻿@model IEnumerable<CarSales.Entities.CarService>
+
+@{
+    ViewData["Title"] = "Service";
+}
+
+<h1>Service</h1>
+
+<p>
+    <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceArrivalDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarProblem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceCharge)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceExitDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarFix)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Warranty)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarPlate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Model)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BodyType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaseNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Notes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceArrivalDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CarProblem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceCharge)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceExitDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CarFix)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Warranty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CarPlate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BodyType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaseNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

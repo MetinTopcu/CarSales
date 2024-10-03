@@ -1,0 +1,79 @@
+﻿@model CarSales.Entities.CarService
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ServiceArrivalDate" class="control-label"></label>
+                <input asp-for="ServiceArrivalDate" class="form-control" />
+                <span asp-validation-for="ServiceArrivalDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarProblem" class="control-label"></label>
+                <input asp-for="CarProblem" class="form-control" />
+                <span asp-validation-for="CarProblem" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceCharge" class="control-label"></label>
+                <input asp-for="ServiceCharge" class="form-control" />
+                <span asp-validation-for="ServiceCharge" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceExitDate" class="control-label"></label>
+                <input asp-for="ServiceExitDate" class="form-control" />
+                <span asp-validation-for="ServiceExitDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarFix" class="control-label"></label>
+                <input asp-for="CarFix" class="form-control" />
+                <span asp-validation-for="CarFix" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Warranty" /> @Html.DisplayNameFor(model => model.Warranty)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarPlate" class="control-label"></label>
+                <input asp-for="CarPlate" class="form-control" />
+                <span asp-validation-for="CarPlate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Brand" class="control-label"></label>
+                <input asp-for="Brand" class="form-control" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model" class="control-label"></label>
+                <input asp-for="Model" class="form-control" />
+                <span asp-validation-for="Model" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BodyType" class="control-label"></label>
+                <input asp-for="BodyType" class="form-control" />
+                <span asp-validation-for="BodyType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaseNo" class="control-label"></label>
+                <input asp-for="SaseNo" class="form-control" />
+                <span asp-validation-for="SaseNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label>
+                <input asp-for="Notes" class="form-control" />
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
