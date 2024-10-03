@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CarSales.Entities
 {
-    public class Service : IEntity<int>
+    public class CarService : IEntity<int>
     {
         [Key]
         public int Id { get; set; }

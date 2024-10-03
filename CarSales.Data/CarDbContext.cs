@@ -15,7 +15,7 @@ namespace CarSales.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Sales> Sales { get; set; }
-        public DbSet<Service> Services { get; set; }
+        public DbSet<CarService> Services { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
