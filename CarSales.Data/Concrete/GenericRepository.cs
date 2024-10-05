@@ -32,6 +32,10 @@ namespace CarSales.Data.Concrete
         {
             return await SingleOrDefaultAsync((T x) => x.Id.Equals(id),cancellationToken);
         }
+        public virtual async Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> selector, CancellationToken cancellationToken = default)
+        {
+            return (selector != null) ? await _dbSet.SingleOrDefaultAsync(selector, cancellationToken) : (await _dbSet.SingleOrDefaultAsync(cancellationToken));
+        }
         public virtual async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> selector, CancellationToken cancellationToken = default)
         {
             return (selector != null) ? await _dbSet.FirstOrDefaultAsync(selector, cancellationToken) : (await _dbSet.FirstOrDefaultAsync(cancellationToken));
@@ -90,11 +94,6 @@ namespace CarSales.Data.Concrete
         public virtual IQueryable<T> Where(Expression<Func<T, bool>> selector)
         {
             return _dbSet.Where(selector);
-        }
-
-        private async Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> selector, CancellationToken cancellationToken = default)
-        {
-            return (selector != null) ? await _dbSet.SingleOrDefaultAsync(selector, cancellationToken) : (await _dbSet.SingleOrDefaultAsync(cancellationToken));
         }
     }
 }
