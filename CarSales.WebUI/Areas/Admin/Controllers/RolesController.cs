@@ -1,19 +1,24 @@
 ﻿using CarSales.Data;
+using CarSales.Data.Abstract;
 using CarSales.Entities;
 using CarSales.Service.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarSales.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class RolesController : Controller
     {
         private readonly IService<Role, CarDbContext> _service;
+        private readonly IUnitOfWork<CarDbContext> _unitOfWork;
 
-        public RolesController(IService<Role, CarDbContext> service)
+        public RolesController(IService<Role, CarDbContext> service, IUnitOfWork<CarDbContext> unitOfWork)
         {
             _service = service;
+            _unitOfWork = unitOfWork;
         }
         public async Task<IActionResult> IndexAsync()
         {
@@ -29,13 +34,17 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAsync(Role role)
         {
+            var cancellationToken = new CancellationToken();
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
                 await _service.InsertOneAsync(role);
+                await _unitOfWork.CommitAsync(cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                await _unitOfWork.RollbackAsync(cancellationToken);
                 return View();
             }
         }
@@ -47,15 +56,19 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Role role)
+        public async Task<IActionResult> EditAsync(int id, Role role)
         {
+            var cancellationToken = new CancellationToken();
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
                 _service.UpdateOne(role);
+                await _unitOfWork.CommitAsync(cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                await _unitOfWork.RollbackAsync(cancellationToken);
                 return View();
             }
         }
@@ -67,15 +80,19 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(Role role)
+        public async Task<IActionResult> DeleteAsync(Role role)
         {
+            var cancellationToken = new CancellationToken();
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
                 _service.DeleteOne(role);
+                await _unitOfWork.CommitAsync(cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                await _unitOfWork.RollbackAsync(cancellationToken);
                 return View();
             }
         }

@@ -1,19 +1,26 @@
 ﻿using CarSales.Data;
+using CarSales.Data.Abstract;
 using CarSales.Entities;
 using CarSales.Service.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace CarSales.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class BrandsController : Controller
     {
         private readonly IService<Brand, CarDbContext> _service;
+        private readonly IUnitOfWork<CarDbContext> _unitOfWork;
 
-        public BrandsController(IService<Brand, CarDbContext> service)
+
+        public BrandsController(IService<Brand, CarDbContext> service, IUnitOfWork<CarDbContext> unitOfWork)
         {
             _service = service;
+            _unitOfWork = unitOfWork;
         }
         public async Task<IActionResult> IndexAsync()
         {
@@ -30,13 +37,17 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAsync(Brand brand)
         {
+            var cancellationToken = new CancellationToken();
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
-                await _service.InsertOneAsync(brand);
+                await _service.InsertOneAsync(brand, cancellationToken);
+                await _unitOfWork.CommitAsync(cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                await _unitOfWork.RollbackAsync(cancellationToken);
                 ModelState.AddModelError("", "Hata Oluştu");
             }
             return View(brand);
@@ -49,15 +60,19 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Brand brand)
+        public async Task<IActionResult> EditAsync(Brand brand)
         {
+            var cancellationToken = new CancellationToken();
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
                 _service.UpdateOne(brand);
+                await _unitOfWork.CommitAsync(cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                await _unitOfWork.RollbackAsync(cancellationToken);
                 ModelState.AddModelError("", "Hata Oluştu");
             }
             return View(brand);
@@ -65,21 +80,27 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> DeleteAsync(int id)
         {
+            var cancellationToken = new CancellationToken();
             var model = await _service.GetByIdAsync(id);
+            await _unitOfWork.CommitAsync(cancellationToken);
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(Brand brand)
+        public async Task<IActionResult> DeleteAsync(Brand brand)
         {
+            var cancellationToken = new CancellationToken();
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
                 _service.DeleteOne(brand);
+                await _unitOfWork.CommitAsync(cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                await _unitOfWork.RollbackAsync(cancellationToken);
                 return View();
             }
         }
