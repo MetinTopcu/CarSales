@@ -7,20 +7,19 @@ namespace CarSales.Entities
         [Key]
         public int Id { get; set; }
         [StringLength(50)]
-        [Required(ErrorMessage = "{0} Boş Bırakılamaz")]
+        [Required(ErrorMessage = "{0} Required")]
         public string Name { get; set; }
         [StringLength(50)]
-        [Required(ErrorMessage = "{0} Boş Bırakılamaz")]
+        [Required]
         public string Surname { get; set; }
         [StringLength(50)]
-        [Required(ErrorMessage = "{0} Boş Bırakılamaz")]
+        [Required]
         public string Email { get; set; }
         [StringLength(20)]
         public string? Phone { get; set; }
         [StringLength(50)]
-        [Required(ErrorMessage = "{0} Boş Bırakılamaz")]
-        public string UserName { get; set; }
-        [Required(ErrorMessage = "{0} Boş Bırakılamaz")]
+        public string? UserName { get; set; }
+        [Required]
         public string Password { get; set; }
         public bool IsItActive { get; set; }
         [Display(Name = "Created Date"), ScaffoldColumn(false)]
