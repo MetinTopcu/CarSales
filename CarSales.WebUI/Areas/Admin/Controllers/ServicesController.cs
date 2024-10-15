@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CarSales.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Policy = "AdminPolicy")]
     public class ServicesController : Controller
     {
         private readonly IService<CarService, CarDbContext> _service;

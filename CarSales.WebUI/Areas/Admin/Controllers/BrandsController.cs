@@ -3,14 +3,12 @@ using CarSales.Data.Abstract;
 using CarSales.Entities;
 using CarSales.Service.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading;
 
 namespace CarSales.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Policy = "AdminPolicy")]
     public class BrandsController : Controller
     {
         private readonly IService<Brand, CarDbContext> _service;
@@ -80,9 +78,7 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
 
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var cancellationToken = new CancellationToken();
             var model = await _service.GetByIdAsync(id);
-            await _unitOfWork.CommitAsync(cancellationToken);
             return View(model);
         }
 

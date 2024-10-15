@@ -2,28 +2,29 @@
 using CarSales.Data.Abstract;
 using CarSales.Entities;
 using CarSales.Service.Abstract;
+using CarSales.WebUI.Utils;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Drawing2D;
 
 namespace CarSales.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Policy = "AdminPolicy")]
-    public class RolesController : Controller
+    public class SlidersController : Controller
     {
-        private readonly IService<Role, CarDbContext> _service;
+        private readonly IService<Slider, CarDbContext> _service;
         private readonly IUnitOfWork<CarDbContext> _unitOfWork;
 
-        public RolesController(IService<Role, CarDbContext> service, IUnitOfWork<CarDbContext> unitOfWork)
+        public SlidersController(IService<Slider, CarDbContext> service, IUnitOfWork<CarDbContext> unitOfWork)
         {
             _service = service;
             _unitOfWork = unitOfWork;
         }
+
         public async Task<IActionResult> IndexAsync()
         {
-            var model = await _service.GetAllAsync();
-            return View(model);
+            return View(await _service.GetAllAsync());
         }
         public IActionResult Create()
         {
@@ -32,21 +33,28 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAsync(Role role)
+        public async Task<IActionResult> CreateAsync(Slider slider, IFormFile? Image)
         {
             var cancellationToken = new CancellationToken();
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
-            try
+            if (ModelState.IsValid)
             {
-                await _service.InsertOneAsync(role);
-                await _unitOfWork.CommitAsync(cancellationToken);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    slider.Image = await FileHelper.FileLoaderAsync(Image, "/Img/Sliders/");
+                    await _service.InsertOneAsync(slider);
+                    await _unitOfWork.CommitAsync(cancellationToken);
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    await _unitOfWork.RollbackAsync(cancellationToken);
+                    ModelState.AddModelError("", "Hata Oluştu");
+                }
             }
-            catch
-            {
-                await _unitOfWork.RollbackAsync(cancellationToken);
-                return View();
-            }
+            return View(slider);
+
         }
         public async Task<IActionResult> EditAsync(int id)
         {
@@ -56,22 +64,32 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(int id, Role role)
+        public async Task<IActionResult> EditAsync(int id, Slider slider, IFormFile? Image)
         {
             var cancellationToken = new CancellationToken();
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
-            try
+            if(ModelState.IsValid)
             {
-                _service.UpdateOne(role);
-                await _unitOfWork.CommitAsync(cancellationToken);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    if (Image is not null)
+                    {
+                        slider.Image = await FileHelper.FileLoaderAsync(Image, "/Img/Sliders/");
+                    }
+                    _service.UpdateOne(slider);
+                    await _unitOfWork.CommitAsync(cancellationToken);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    await _unitOfWork.RollbackAsync(cancellationToken);
+                    ModelState.AddModelError("", "Hata Oluştu");
+                }
             }
-            catch
-            {
-                await _unitOfWork.RollbackAsync(cancellationToken);
-                return View();
-            }
+            return View(slider);
+
         }
+
         public async Task<IActionResult> DeleteAsync(int id)
         {
             var model = await _service.GetByIdAsync(id);
@@ -80,13 +98,13 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteAsync(Role role)
+        public async Task<IActionResult> DeleteAsync(Slider slider)
         {
             var cancellationToken = new CancellationToken();
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
             try
             {
-                _service.DeleteOne(role);
+                _service.DeleteOne(slider);
                 await _unitOfWork.CommitAsync(cancellationToken);
                 return RedirectToAction(nameof(Index));
             }

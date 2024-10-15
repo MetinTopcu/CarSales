@@ -2,6 +2,7 @@
 using CarSales.Entities;
 using CarSales.Service.Abstract;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -11,12 +12,14 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
     public class LoginController : Controller
     {
         private readonly IService<User, CarDbContext> _service;
+        private readonly IService<Role, CarDbContext> _serviceRole;
 
-        public LoginController(IService<User, CarDbContext> service)
+
+        public LoginController(IService<User, CarDbContext> service, IService<Role, CarDbContext> serviceRole)
         {
             _service = service;
+            _serviceRole = serviceRole;
         }
-
         public IActionResult Index()
         {
             return View();
@@ -34,15 +37,19 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
                 var account = await _service.SingleOrDefaultAsync(x => x.Email == email && x.Password == password && x.IsItActive == true);
                 if (account == null)
                 {
-                    TempData["Mesaj"] = "Giriş Başarısız";
+                    TempData["Mesaj"] = "Login is not successfull";
                 }
                 else
                 {
+                    var role = await _serviceRole.FirstOrDefaultAsync(x => x.Id == account.RoleId);
                     var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.Name, account.Name ),
-                        new Claim("Role", "Admin"),
                     };
+                    if(role is not null)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, role.Name));
+                    }
                     var userIdentity = new ClaimsIdentity(claims, "Login");
                     ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
                     await HttpContext.SignInAsync(principal);
@@ -51,7 +58,7 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
             }
             catch (Exception)
             {
-                TempData["Mesaj"] = "Hata Oluştu";
+                TempData["Mesaj"] = "Make Mistake";
                 throw;
             }
             return View();
