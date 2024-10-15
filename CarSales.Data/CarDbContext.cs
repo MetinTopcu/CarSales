@@ -1,10 +1,5 @@
 ﻿using CarSales.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarSales.Data
 {
@@ -17,6 +12,12 @@ namespace CarSales.Data
         public DbSet<Sales> Sales { get; set; }
         public DbSet<CarService> Services { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Slider> Sliders { get; set; }
+
+        public CarDbContext()
+        {
+        }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

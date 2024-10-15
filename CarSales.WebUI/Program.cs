@@ -1,7 +1,11 @@
 using CarSales.Data;
+using CarSales.Data.Abstract;
+using CarSales.Data.Concrete;
 using CarSales.Service.Abstract;
 using CarSales.Service.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,16 +13,28 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<CarDbContext>();
+
 builder.Services.AddTransient(typeof(IService<,>), typeof(Service<,>));
+builder.Services.AddTransient<ICarService, CarService>();
+
+builder.Services.AddScoped<IUnitOfWork<CarDbContext>, UnitOfWork<CarDbContext>>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie( x =>
 {
-    x.LoginPath = "/Admin/Login"; //nereden login olacak
+    x.LoginPath = "/Account/Login"; //nereden login olacak
     x.AccessDeniedPath = "/AccessDenied"; // login engellendiði yer
-    x.LogoutPath = "/Admin/Logout";
+    x.LogoutPath = "/Account/Logout";
     x.Cookie.Name = "Admin";
     x.Cookie.MaxAge = TimeSpan.FromDays(7);
     x.Cookie.IsEssential = true;
+});
+
+builder.Services.AddAuthorization(x =>
+{
+    x.AddPolicy("AdminPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+    x.AddPolicy("UserPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Admin", "User"));
+    x.AddPolicy("EmployePolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Admin", "Employe"));
+    x.AddPolicy("CustomerPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Admin", "Employe", "Customer"));
 });
 
 var app = builder.Build();
