@@ -4,6 +4,7 @@ using CarSales.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarSales.Data.Migrations
 {
     [DbContext(typeof(CarDbContext))]
-    partial class CarDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241012181724_MotherPageAddedinCarEntity")]
+    partial class MotherPageAddedinCarEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,6 +177,7 @@ namespace CarSales.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Adress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CarID")
@@ -192,6 +196,7 @@ namespace CarSales.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
@@ -199,6 +204,7 @@ namespace CarSales.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TCNO")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -331,6 +337,7 @@ namespace CarSales.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -351,7 +358,7 @@ namespace CarSales.Data.Migrations
                             Phone = "0850",
                             RoleId = 1,
                             Surname = "admin",
-                            UserCreateDate = new DateTime(2024, 10, 15, 1, 0, 56, 587, DateTimeKind.Local).AddTicks(2318),
+                            UserCreateDate = new DateTime(2024, 10, 12, 21, 17, 24, 114, DateTimeKind.Local).AddTicks(986),
                             UserName = "admin"
                         });
                 });

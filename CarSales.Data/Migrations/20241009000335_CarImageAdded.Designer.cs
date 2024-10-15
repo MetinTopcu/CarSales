@@ -4,6 +4,7 @@ using CarSales.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarSales.Data.Migrations
 {
     [DbContext(typeof(CarDbContext))]
-    partial class CarDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241009000335_CarImageAdded")]
+    partial class CarImageAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +62,6 @@ namespace CarSales.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("ForMotherPage")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Image1")
                         .HasMaxLength(100)
@@ -174,6 +174,7 @@ namespace CarSales.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Adress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CarID")
@@ -192,6 +193,7 @@ namespace CarSales.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
@@ -199,6 +201,7 @@ namespace CarSales.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TCNO")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -261,35 +264,6 @@ namespace CarSales.Data.Migrations
                     b.ToTable("Sales");
                 });
 
-            modelBuilder.Entity("CarSales.Entities.Slider", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Url")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sliders");
-                });
-
             modelBuilder.Entity("CarSales.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -331,6 +305,7 @@ namespace CarSales.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -351,7 +326,7 @@ namespace CarSales.Data.Migrations
                             Phone = "0850",
                             RoleId = 1,
                             Surname = "admin",
-                            UserCreateDate = new DateTime(2024, 10, 15, 1, 0, 56, 587, DateTimeKind.Local).AddTicks(2318),
+                            UserCreateDate = new DateTime(2024, 10, 9, 3, 3, 35, 737, DateTimeKind.Local).AddTicks(3564),
                             UserName = "admin"
                         });
                 });

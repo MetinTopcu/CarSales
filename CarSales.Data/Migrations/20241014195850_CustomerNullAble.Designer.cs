@@ -4,6 +4,7 @@ using CarSales.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarSales.Data.Migrations
 {
     [DbContext(typeof(CarDbContext))]
-    partial class CarDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241014195850_CustomerNullAble")]
+    partial class CustomerNullAble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,6 +334,7 @@ namespace CarSales.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -351,7 +355,7 @@ namespace CarSales.Data.Migrations
                             Phone = "0850",
                             RoleId = 1,
                             Surname = "admin",
-                            UserCreateDate = new DateTime(2024, 10, 15, 1, 0, 56, 587, DateTimeKind.Local).AddTicks(2318),
+                            UserCreateDate = new DateTime(2024, 10, 14, 22, 58, 50, 93, DateTimeKind.Local).AddTicks(272),
                             UserName = "admin"
                         });
                 });
