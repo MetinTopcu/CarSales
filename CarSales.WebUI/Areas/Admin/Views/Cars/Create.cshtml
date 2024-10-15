@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="BrandId" class="control-label"></label>
@@ -42,6 +42,11 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ForMotherPage" /> @Html.DisplayNameFor(model => model.ForMotherPage)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsItOnSale" /> @Html.DisplayNameFor(model => model.IsItOnSale)
                 </label>
             </div>
@@ -51,6 +56,31 @@
                 <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Image1" class="control-label">Select Image1</label>
+                <input asp-for="Image1" class="form-control" type="file" />
+                <span asp-validation-for="Image1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image2" class="control-label">Select Image2</label>
+                <input asp-for="Image2" class="form-control" type="file" />
+                <span asp-validation-for="Image2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image3" class="control-label">Select Image3</label>
+                <input asp-for="Image3" class="form-control" type="file" />
+                <span asp-validation-for="Image3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image4" class="control-label">Select Image4</label>
+                <input asp-for="Image4" class="form-control" type="file" />
+                <span asp-validation-for="Image4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image5" class="control-label">Select Image5</label>
+                <input asp-for="Image5" class="form-control" type="file" />
+                <span asp-validation-for="Image5" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

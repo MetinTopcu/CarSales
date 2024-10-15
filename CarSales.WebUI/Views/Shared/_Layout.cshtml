@@ -20,12 +20,30 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Car" asp-action="List">All Car</a>
                         </li>
                     </ul>
+                </div>
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" asp-action="Search" asp-controller="Car" method="get">
+                    <input name="query" type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
+                </form>
+                <div class="text-end">
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Account" asp-action="Index" class="btn btn-primary me-2">Account</a>
+                        <a asp-controller="Account" asp-action="Logout" class="btn btn-primary">Logout</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-primary me-2">Login</a>
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-primary">Sign-up</a>
+                    }
                 </div>
             </div>
         </nav>
