@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace CarSales.Data.Concrete
 {
-    public class CarRepository<TDbContext> : GenericRepository<Car, CarDbContext, int>, ICarRepository
+    public class CarRepository : GenericRepository<Car, CarDbContext, int>, ICarRepository
     {
         public CarRepository(CarDbContext dbContext) : base(dbContext)
         {
