@@ -28,5 +28,6 @@ namespace CarSales.Entities
         public int RoleId { get; set; }
         [Display(Name = "User Role")]
         public Role? Role { get; set; }
+        public Guid? UserGuid { get; set; } = Guid.NewGuid();
     }
 }
