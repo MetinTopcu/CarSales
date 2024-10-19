@@ -12,12 +12,12 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
     [Authorize(Policy = "AdminPolicy")]
     public class UsersController : Controller
     {
-        private readonly IService<User, CarDbContext> _service;
+        private readonly IUserService _service;
         private readonly IService<Role, CarDbContext> _serviceRole;
         private readonly IUnitOfWork<CarDbContext> _unitOfWork;
 
 
-        public UsersController(IService<User, CarDbContext> service, IService<Role, CarDbContext> serviceRole, IUnitOfWork<CarDbContext> unitOfWork)
+        public UsersController(IUserService service, IService<Role, CarDbContext> serviceRole, IUnitOfWork<CarDbContext> unitOfWork)
         {
             _service = service;
             _serviceRole = serviceRole;
@@ -25,7 +25,7 @@ namespace CarSales.WebUI.Areas.Admin.Controllers
         }
         public async Task<IActionResult> IndexAsync()
         {
-            var model = await _service.GetAllAsync();
+            var model = await _service.UserwithRoleListAsync();
             return View(model);
         }
 

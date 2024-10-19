@@ -12,20 +12,65 @@ namespace CarSales.WebUI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IService<User, CarDbContext> _service;
+        private readonly IUserService _service;
         private readonly IUnitOfWork<CarDbContext> _unitOfWork;
         private readonly IService<Role, CarDbContext> _roleService;
 
-        public AccountController(IService<User, CarDbContext> service, IUnitOfWork<CarDbContext> unitOfWork, IService<Role, CarDbContext> roleService)
+        public AccountController(IUserService service, IUnitOfWork<CarDbContext> unitOfWork, IService<Role, CarDbContext> roleService)
         {
             _service = service;
             _unitOfWork = unitOfWork;
             _roleService = roleService;
         }
         [Authorize(Policy = "CustomerPolicy")]
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var userGuid = User.FindFirst(ClaimTypes.UserData)?.Value;
+            if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(userGuid))
+            {
+                var user = await _service.FirstOrDefaultAsync(x => x.Email == email && x.UserGuid.ToString() == userGuid);
+                if (user != null)
+                {
+                    return View(user);
+                }
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> UserUpdateAsync(User user)
+        {
+            var cancellationToken = new CancellationToken();
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                var email = User.FindFirst(ClaimTypes.Email)?.Value;
+                var userGuid = User.FindFirst(ClaimTypes.UserData)?.Value;
+                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(userGuid))
+                {
+                    var getUser = await _service.FirstOrDefaultAsync(x => x.Email == email && x.UserGuid.ToString() == userGuid);
+                    if (getUser != null)
+                    {
+                        getUser.Name = user.Name;
+                        getUser.IsItActive = user.IsItActive;
+                        getUser.Email = user.Email;
+                        getUser.Password = user.Password;
+                        getUser.Surname = user.Surname;
+                        getUser.Phone = user.Phone;
+                        getUser.UserName = user.Name + user.Surname + user.Id;
+
+                        _service.UpdateOne(getUser);
+                        await _unitOfWork.CommitAsync(cancellationToken);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackAsync(cancellationToken);
+                ModelState.AddModelError("", "Hata Oluştu!");
+            }
+
+            return RedirectToAction("Index");
         }
         public IActionResult Login()
         {
@@ -47,6 +92,8 @@ namespace CarSales.WebUI.Controllers
                     var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.Name, account.Name ),
+                        new Claim(ClaimTypes.Email, account.Email),
+                        new Claim(ClaimTypes.UserData, account.UserGuid.ToString())
                     };
                     if (role is not null)
                     {
@@ -55,7 +102,7 @@ namespace CarSales.WebUI.Controllers
                     var userIdentity = new ClaimsIdentity(claims, "Login");
                     ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
                     await HttpContext.SignInAsync(principal);
-                    if(role.Name == "Admin")
+                    if (role.Name == "Admin")
                     {
                         return Redirect("/Admin");
                     }
@@ -92,7 +139,7 @@ namespace CarSales.WebUI.Controllers
                     user.UserName = user.Name + user.Surname + user.Id;
                     user.IsItActive = true;
                     user.UserCreateDate = DateTime.Now;
-                    await _service.InsertOneAsync(user);
+                    await _service.InsertOneAsync(user, cancellationToken);
                     await _unitOfWork.CommitAsync(cancellationToken);
                     return Redirect("/Login");
                 }
