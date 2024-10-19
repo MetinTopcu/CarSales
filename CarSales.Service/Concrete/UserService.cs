@@ -4,9 +4,9 @@ using CarSales.Service.Abstract;
 
 namespace CarSales.Service.Concrete
 {
-    public class CarService : CarRepository, ICarService
+    public class UserService : UserRepository, IUserService
     {
-        public CarService(CarDbContext dbContext) : base(dbContext)
+        public UserService(CarDbContext dbContext) : base(dbContext)
         {
         }
     }
